@@ -1,0 +1,22 @@
+name: Import verified portfolio source
+on:
+  workflow_dispatch:
+permissions:
+  contents: write
+jobs:
+  import:
+    runs-on: ubuntu-latest
+    steps:
+      - name: Check out repository
+        uses: actions/checkout@v6
+      - name: Expand and verify portfolio
+        run: |
+          unzip -oq anamika-github-portfolio.zip
+          node scripts/check-static.mjs
+          node --check dist/assets/fieldbook.js
+          rm anamika-github-portfolio.zip
+          git config user.name "Anamika Singh"
+          git config user.email "anamikas27aug-png@users.noreply.github.com"
+          git add .
+          git commit -m "Add portfolio source and GitHub Pages deployment"
+          git push
